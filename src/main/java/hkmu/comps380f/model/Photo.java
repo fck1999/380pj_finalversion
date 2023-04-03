@@ -12,15 +12,17 @@ public class Photo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(name = "name")
-    private String customerName;
-    private String subject;
+    @Column(name = "username", insertable=false, updatable=false)
+    private String username;
     private String body;
-
     @OneToMany(mappedBy = "photo", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(FetchMode.SUBSELECT)
     private List<Attachment> attachments = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "username")
+    private AppUser user;
 
     // getters and setters of all properties
     public long getId() {
@@ -31,20 +33,12 @@ public class Photo {
         this.id = id;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
-
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getBody() {
@@ -61,6 +55,14 @@ public class Photo {
 
     public void setAttachments(List<Attachment> attachments) {
         this.attachments = attachments;
+    }
+
+    public AppUser getAppUser() {
+        return user;
+    }
+
+    public void setAppUser(AppUser user) {
+        this.user = user;
     }
 
     public void deleteAttachment(Attachment attachment) {

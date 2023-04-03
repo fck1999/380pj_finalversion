@@ -2,6 +2,7 @@ package hkmu.comps380f.dao;
 
 import hkmu.comps380f.exception.AttachmentNotFound;
 import hkmu.comps380f.exception.PhotoNotFound;
+import hkmu.comps380f.model.AppUser;
 import hkmu.comps380f.model.Attachment;
 import hkmu.comps380f.model.Photo;
 import jakarta.annotation.Resource;
@@ -17,7 +18,8 @@ import java.util.UUID;
 public class PhotoService {
     @Resource
     private PhotoRepository tRepo;
-
+    @Resource
+    private AppUserRepository auRepo;
     @Resource
     private AttachmentRepository aRepo;
 
@@ -51,10 +53,10 @@ public class PhotoService {
     }
 
     @Transactional(rollbackFor = PhotoNotFound.class)
-    public void delete(long id) throws PhotoNotFound {
-        Photo deletedPhoto = tRepo.findById(id).orElse(null);
+    public void delete(long photoId) throws PhotoNotFound {
+        Photo deletedPhoto = tRepo.findById(photoId).orElse(null);
         if (deletedPhoto == null) {
-            throw new PhotoNotFound(id);
+            throw new PhotoNotFound(photoId);
         }
         tRepo.delete(deletedPhoto);
     }
@@ -77,12 +79,11 @@ public class PhotoService {
     }
 
     @Transactional
-    public long createPhoto(String customerName, String subject,
-                             String body, List<MultipartFile> attachments)
+    public long createPhoto(String customerName, String body, List<MultipartFile> attachments)
             throws IOException {
+        AppUser poster = auRepo.findById(customerName).orElse(null);
         Photo photo = new Photo();
-        photo.setCustomerName(customerName);
-        photo.setSubject(subject);
+        photo.setAppUser(poster);
         photo.setBody(body);
 
         for (MultipartFile filePart : attachments) {
@@ -101,14 +102,12 @@ public class PhotoService {
         return savedPhoto.getId();
     }
     @Transactional(rollbackFor = PhotoNotFound.class)
-    public void updatePhoto(long id, String subject,
-                             String body, List<MultipartFile> attachments)
+    public void updatePhoto(long id, String body, List<MultipartFile> attachments)
             throws IOException, PhotoNotFound {
         Photo updatedPhoto = tRepo.findById(id).orElse(null);
         if (updatedPhoto == null) {
             throw new PhotoNotFound(id);
         }
-        updatedPhoto.setSubject(subject);
         updatedPhoto.setBody(body);
 
         for (MultipartFile filePart : attachments) {

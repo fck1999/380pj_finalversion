@@ -26,6 +26,7 @@
         <th>Username</th>
         <th>Password</th>
         <th>Roles</th>
+        <th>Photos</th>
         <th>Action</th>
       </tr>
 
@@ -41,7 +42,14 @@
             </c:forEach>
           </td>
           <td>
+            <c:forEach items="${user.photos}" var="photo" varStatus="status">
+              <c:if test="${!status.first}">, </c:if>
+              ${photo.id}
+            </c:forEach>
+          </td>
+          <td>
             [<a href="<c:url value="/user/delete/${user.username}" />">Delete</a>]
+            [<a href="<c:url value="/user/edit/${user.username}" />">Edit</a>]
           </td>
         </tr>
       </c:forEach>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Customer Support</title>
+    <title>Edit Post</title>
 </head>
 <body>
 <c:url var="logoutUrl" value="/logout"/>
@@ -12,8 +12,6 @@
 
 <h2>Edit Post #${Photo.id}</h2>
 <form:form method="POST" enctype="multipart/form-data" modelAttribute="photoForm">
-    <form:label path="subject">Subject</form:label><br/>
-    <form:input type="text" path="subject" /><br/><br/>
     <form:label path="body">Body</form:label><br/>
     <form:textarea path="body" rows="5" cols="30" /><br/><br/>
     <b>Add more attachments</b><br />

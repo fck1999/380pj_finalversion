@@ -17,7 +17,9 @@ public class AppUser {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserRole> roles = new ArrayList<>();
-
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Photo> photos = new ArrayList<>();
 
     public AppUser() {}
 
@@ -30,6 +32,7 @@ public class AppUser {
             this.roles.add(new UserRole(this, role));
         }
     }
+
 
     // getters and setters of all properties
 
@@ -70,6 +73,14 @@ public class AppUser {
 
     public void setRoles(List<UserRole> roles) {
         this.roles = roles;
+    }
+
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<Photo> attachments) {
+        this.photos = photos;
     }
 
 }

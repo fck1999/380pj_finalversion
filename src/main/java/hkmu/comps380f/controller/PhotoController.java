@@ -41,19 +41,10 @@ public class PhotoController {
     }
 
     public static class Form {
-        private String subject;
         private String body;
         private List<MultipartFile> attachments;
 
         // Getters and Setters of customerName, subject, body, attachments
-
-        public String getSubject() {
-            return subject;
-        }
-
-        public void setSubject(String subject) {
-            this.subject = subject;
-        }
 
         public String getBody() {
             return body;
@@ -75,7 +66,7 @@ public class PhotoController {
     @PostMapping("/create")
     public View create(Form form, Principal principal) throws IOException {
         long photoId = tService.createPhoto(principal.getName(),
-                form.getSubject(), form.getBody(), form.getAttachments());
+                form.getBody(), form.getAttachments());
         return new RedirectView("/photo/view/" + photoId, true);
     }
 
@@ -99,8 +90,7 @@ public class PhotoController {
     }
 
     @GetMapping("/delete/{photoId}")
-    public String deletePhoto(@PathVariable("photoId") long photoId)
-            throws PhotoNotFound {
+    public String deletePhoto(@PathVariable("photoId") long photoId) throws PhotoNotFound {
         tService.delete(photoId);
         return "redirect:/photo/list";
     }
@@ -120,7 +110,7 @@ public class PhotoController {
         Photo photo = tService.getPhoto(photoId);
         if (photo == null
                 || (!request.isUserInRole("ROLE_ADMIN")
-                && !principal.getName().equals(photo.getCustomerName()))) {
+                && !principal.getName().equals(photo.getUsername()))) {
             return new ModelAndView(new RedirectView("/photo/list", true));
         }
 
@@ -128,7 +118,6 @@ public class PhotoController {
         modelAndView.addObject("photo", photo);
 
         Form photoForm = new Form();
-        photoForm.setSubject(photo.getSubject());
         photoForm.setBody(photo.getBody());
         modelAndView.addObject("photoForm", photoForm);
 
@@ -142,12 +131,11 @@ public class PhotoController {
         Photo photo = tService.getPhoto(photoId);
         if (photo == null
                 || (!request.isUserInRole("ROLE_ADMIN")
-                && !principal.getName().equals(photo.getCustomerName()))) {
+                && !principal.getName().equals(photo.getUsername()))) {
             return "redirect:/photo/list";
         }
 
-        tService.updatePhoto(photoId, form.getSubject(),
-                form.getBody(), form.getAttachments());
+        tService.updatePhoto(photoId, form.getBody(), form.getAttachments());
         return "redirect:/photo/view/" + photoId;
     }
 

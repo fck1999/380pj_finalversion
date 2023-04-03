@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Customer Support</title>
+  <title>Photo Blog</title>
 </head>
 <body>
 <c:url var="logoutUrl" value="/logout"/>
@@ -23,14 +23,10 @@
     <c:forEach items="${photoDatabase}" var="entry">
       Photo ${entry.id}:
       <a href="<c:url value="/photo/view/${entry.id}" />">
-        <c:out value="${entry.subject}"/></a>
-      (customer: <c:out value="${entry.customerName}"/>)
-      <security:authorize access="hasRole('ADMIN') or
-                                principal.username=='${entry.customerName}'">
-        [<a href="<c:url value="/photo/edit/${entry.id}" />">Edit</a>]
-      </security:authorize>
+      (Poster: <c:out value="${entry.username}"/>)</a>
+
       <security:authorize access="hasRole('ADMIN')">
-        [<a href="<c:url value="/photo/delete/${entry.id}" />">Delete</a>]
+        [<a href="<c:url value="/photo/delete/${entry.id}"/>">Delete</a>]
       </security:authorize>
       <br />
     </c:forEach>

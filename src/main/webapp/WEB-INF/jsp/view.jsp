@@ -10,17 +10,17 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
 
-<h2>Post #${photoId}: <c:out value="${photo.subject}"/></h2>
+<h2>Post #${photoId}:</h2>
 <security:authorize access="hasRole('ADMIN') or
-                          principal.username=='${photo.customerName}'">
+                          principal.username=='${photo.username}'">
     [<a href="<c:url value="/photo/edit/${photo.id}" />">Edit</a>]
 </security:authorize>
 <security:authorize access="hasRole('ADMIN') or
-                    principal.username=='${photo.customerName}'">
+                    principal.username=='${photo.username}'">
     [<a href="<c:url value="/photo/delete/${photo.id}" />">Delete</a>]
 </security:authorize>
 <br/><br/>
-<i>User Name - <c:out value="${photo.customerName}"/></i><br/><br/>
+<i>User Name - <c:out value="${photo.username}"/></i><br/><br/>
 <c:out value="${photo.body}"/><br/><br/>
 <c:if test="${!empty photo.attachments}">
     Attachments:
